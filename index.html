@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>GlobalEarn Ultra Pro | النظام المتكامل v5.0</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@200;400;700;900&family=Orbitron:wght@400;900&family=Poppins:wght@100;400;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        /* =========================================
+           1. CSS VARIABLES & CORE THEME (أكثر من 100 سطر تنسيق)
+           ========================================= */
+        :root {
+            --p-blue: #007AFF;
+            --p-blue-rgb: 0, 122, 255;
+            --p-dark: #00458b;
+            --accent: #5856D6;
+            --success: #34C759;
+            --gold: #FFCC00;
+            --danger: #FF3B30;
+            --bg-deep: #000000;
+            --bg-soft: #0a0a0c;
+            --card-glass: rgba(22, 22, 24, 0.8);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-dim: #a1a1a6;
+            --safe-area-top: env(safe-area-inset-top);
+            --safe-area-bottom: env(safe-area-inset-bottom);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            outline: none;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            user-select: none;
+            touch-action: manipulation;
+        }
+
+        /* =========================================
+           2. LAYOUT STRUCTURE
+           ========================================= */
+        .app-wrapper {
+            max-width: 500px;
+            margin: 0 auto;
+            height: 100vh;
+            background: var(--bg-soft);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid var(--border);
+            border-right: 1px solid var(--border);
+            box-shadow: 0 0 100px rgba(0,0,0,1);
+        }
+
+        /* الطبقة الضوئية خلف العناصر */
+        .glow-bg {
+            position: absolute;
+            top: -10%; left: -10%;
+            width: 120%; height: 120%;
+            background: radial-gradient(circle at 50% 50%, rgba(var(--p-blue-rgb), 0.05) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* =========================================
+           3. HEADER (الزجاجي الحديث)
+           ========================================= */
+        header {
+            padding: calc(15px + var(--safe-area-top)) 20px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 12, 0.7);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            position: sticky;
+            top: 0;
+        }
+
+        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand i { 
+            font-size: 24px; 
+            background: var(--grad-blue); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 8px rgba(0,122,255,0.4));
+        }
+        .brand h1 { font-family: 'Poppins'; font-weight: 900; font-size: 20px; letter-spacing: -0.5px; }
+
+        .user-pill {
+            background: rgba(255,255,255,0.05);
+            padding: 6px 14px;
+            border-radius: 100px;
+            border: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .user-pill:active { transform: scale(0.9); background: rgba(255,255,255,0.1); }
+        .user-pill i { color: var(--gold); font-size: 14px; }
+        .user-pill b { font-family: 'Orbitron'; font-size: 14px; color: var(--gold); }
+
+        /* =========================================
+           4. MAIN CONTENT AREA
+           ========================================= */
+        main {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            padding-bottom: 120px;
+            position: relative;
+            scrollbar-width: none; /* Firefox */
+        }
+        main::-webkit-scrollbar { display: none; }
+
+        /* =========================================
+           5. DASHBOARD CARDS
+           ========================================= */
+        .balance-card {
+            background: linear-gradient(160deg, #161618 0%, #050505 100%);
+            border-radius: 35px;
+            padding: 30px;
+            border: 1px solid var(--border);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .balance-card::before {
+            content: '';
+            position: absolute;
+            top: -50%; right: -20%;
+            width: 150px; height: 150px;
+            background: var(--p-blue);
+            filter: blur(100px);
+            opacity: 0.15;
+        }
+
+        .balance-label { font-size: 12px; color: var(--text-dim); font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+        .balance-main { display: flex; align-items: center; justify-content: center; gap: 15px; margin: 15px 0; }
+        .balance-main span { font-family: 'Poppins'; font-size: 55px; font-weight: 900; }
+        .balance-main i { font-size: 35px; color: var(--gold); filter: drop-shadow(0 0 15px rgba(255,204,0,0.4)); }
+
+        .progress-container { margin-top: 20px; }
+        .progress-track { height: 8px; background: rgba(255,255,255,0.05); border-radius: 10px; overflow: hidden; }
+        .progress-fill { 
+            height: 100%; width: 0%; 
+            background: linear-gradient(90deg, var(--p-blue), var(--accent)); 
+            box-shadow: 0 0 15px var(--p-blue);
+            transition: 1.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .progress-info { display: flex; justify-content: space-between; margin-top: 10px; font-size: 11px; font-weight: 800; color: var(--text-dim); }
+
+        /* =========================================
+           6. STORE & GRID SYSTEM
+           ========================================= */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 30px 0 15px;
+        }
+        .section-header h2 { font-size: 17px; font-weight: 900; display: flex; align-items: center; gap: 10px; }
+        .section-header h2::before { content: ''; width: 5px; height: 18px; background: var(--p-blue); border-radius: 10px; }
+        
+        .store-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .item-card {
+            background: var(--card-glass);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+        }
+        .item-card:active { transform: scale(0.92); border-color: var(--p-blue); background: rgba(var(--p-blue-rgb), 0.05); }
+
+        .item-card i { font-size: 40px; margin-bottom: 12px; display: block; }
+        .item-card b { display: block; font-size: 14px; margin-bottom: 8px; font-weight: 800; }
+        .item-price {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 5px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 900;
+            color: var(--p-blue);
+        }
+
+        /* =========================================
+           7. TASK LIST
+           ========================================= */
+        .task-box {
+            background: var(--card-glass);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 12px;
+            transition: 0.3s;
+        }
+        .task-box:active { background: #1c1c1e; }
+        .task-icon {
+            width: 50px; height: 50px;
+            background: rgba(var(--p-blue-rgb), 0.1);
+            border-radius: 18px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; color: var(--p-blue);
+        }
+        .task-content { flex: 1; }
+        .task-content h4 { font-size: 14px; margin-bottom: 4px; }
+        .task-content p { font-size: 11px; color: var(--success); font-weight: 800; }
+        .task-btn { padding: 8px 15px; background: var(--p-blue); border-radius: 12px; font-size: 11px; font-weight: 900; border: none; color: #fff; }
+
+        /* =========================================
+           8. NAVIGATION (BOTTOM)
+           ========================================= */
+        nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            max-width: 500px;
+            height: calc(85px + var(--safe-area-bottom));
+            background: rgba(10, 10, 12, 0.85);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: space-around;
+            padding-bottom: var(--safe-area-bottom);
+            z-index: 2000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-dim);
+            text-decoration: none;
+            flex: 1;
+            transition: 0.3s;
+        }
+        .nav-item.active { color: var(--p-blue); }
+        .nav-item i { font-size: 24px; margin-bottom: 5px; }
+        .nav-item span { font-size: 10px; font-weight: 800; }
+
+        /* =========================================
+           9. MODALS & OVERLAYS
+           ========================================= */
+        .full-modal {
+            position: fixed;
+            inset: 0;
+            background: var(--bg-deep);
+            z-index: 5000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .loader-ring {
+            width: 120px; height: 120px;
+            position: relative;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .loader-ring::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border: 4px solid #111;
+            border-top: 4px solid var(--p-blue);
+            border-radius: 50%;
+            animation: spin 1s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .timer-val { font-family: 'Poppins'; font-size: 50px; font-weight: 900; margin: 20px 0; color: var(--p-blue); }
+
+        #toast-notify {
+            position: fixed;
+            top: 40px; left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: var(--success);
+            color: #000;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-weight: 900;
+            z-index: 6000;
+            transition: 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 10px 30px rgba(52, 199, 89, 0.3);
+        }
+        #toast-notify.show { transform: translateX(-50%) translateY(0); }
+
+        /* =========================================
+           10. ADMIN & ANALYTICS
+           ========================================= */
+        .admin-page { display: none; padding: 20px; }
+        .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        .stat-box { background: #161618; border: 1px solid var(--border); border-radius: 20px; padding: 15px; }
+        .stat-box h6 { font-size: 10px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px; }
+        .stat-box b { font-family: 'Poppins'; font-size: 18px; color: var(--success); }
+
+        .page-node { display: none; }
+        .page-node.active { display: block; animation: fadeInUp 0.5s ease forwards; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+<div id="toast-notify">تمت إضافة النقاط! +250 💰</div>
+
+<div class="app-wrapper">
+    <div class="glow-bg"></div>
+
+    <header>
+        <div class="brand">
+            <i class="fa-solid fa-shield-halved"></i>
+            <h1>GLOBAL<span>EARN</span></h1>
+        </div>
+        <div class="user-pill" onclick="Engine.Admin.requestAccess()">
+            <i class="fa-solid fa-coins"></i>
+            <b id="top-balance">0</b>
+        </div>
+    </header>
+
+    <main>
+        <div id="page-home" class="page-node active">
+            <div class="live-payouts">
+                <div class="payout-track" id="live-ticker">
+                    </div>
+            </div>
+
+            <div class="balance-card">
+                <div class="balance-label">Total Earnings</div>
+                <div class="balance-main">
+                    <i class="fa-solid fa-coins"></i>
+                    <span id="main-balance">0</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-track"><div class="progress-fill" id="goal-bar"></div></div>
+                    <div class="progress-info">
+                        <span>Withdrawal Goal: 10k</span>
+                        <span id="goal-percent">0%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section-header">
+                <h2>High-Reward Tasks</h2>
+            </div>
+
+            <div id="tasks-list">
+                </div>
+        </div>
+
+        <div id="page-store" class="page-node">
+            <div class="section-header">
+                <h2>Premium Services</h2>
+            </div>
+            <div class="store-grid" id="store-items">
+                </div>
+        </div>
+
+        <div id="page-admin" class="page-node">
+            <div class="section-header"><h2>Control Panel</h2></div>
+            <div class="stats-grid">
+                <div class="stat-box"><h6>Owner Revenue</h6><b id="adm-profit">$0.00</b></div>
+                <div class="stat-box"><h6>Total Orders</h6><b id="adm-orders">0</b></div>
+                <div class="stat-box"><h6>Active Users</h6><b>1,248</b></div>
+                <div class="stat-box"><h6>API Status</h6><b style="color:var(--success)">Online</b></div>
+            </div>
+            <div style="margin-top:20px; background:#000; border-radius:20px; padding:20px; border:1px solid var(--border);">
+                <h4 style="font-size:12px; margin-bottom:10px; color:var(--text-dim)">SYSTEM LOGS</h4>
+                <div id="sys-logs" style="font-size:10px; font-family:'Poppins'; height:150px; overflow-y:auto; line-height:1.6;">
+                    > System Kernel v5.0 initialized...<br>
+                    > Database connection secure...<br>
+                    > Ready for transactions...
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <nav>
+        <a href="javascript:void(0)" class="nav-item active" onclick="Engine.UI.switchPage('home', this)">
+            <i class="fa-solid fa-house"></i>
+            <span>Home</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="Engine.UI.switchPage('store', this)">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <span>Store</span>
+        </a>
+        <a href="javascript:void(0)" class="nav-item" onclick="Engine.Admin.requestAccess()">
+            <i class="fa-solid fa-user-gear"></i>
+            <span>Admin</span>
+        </a>
+    </nav>
+
+    <div id="task-modal" class="full-modal">
+        <div class="loader-ring"></div>
+        <h2 id="modal-title" style="margin-top:30px;">Processing Request</h2>
+        <div class="timer-val" id="modal-timer">0</div>
+        <p style="color:var(--text-dim); max-width:250px;">Please do not close the app. Verification in progress...</p>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+/**
+ * GLOBALEARN ULTRA ENGINE v5.0
+ * Fully Managed Autonomous System
+ */
+
+const Engine = {
+    // 1. DATABASE (Simulated Persistence)
+    db: {
+        user: {
+            balance: parseInt(localStorage.getItem('_ge_bal')) || 0,
+            id: 'GE-' + Math.floor(Math.random()*99999),
+        },
+        admin: {
+            revenue: parseFloat(localStorage.getItem('_ge_rev')) || 0,
+            orders: parseInt(localStorage.getItem('_ge_ord')) || 0,
+            key: '1234' // SECRET KEY
+        },
+        logs: JSON.parse(localStorage.getItem('_ge_logs')) || []
+    },
+
+    // 2. CONFIGURATION
+    config: {
+        goal: 10000,
+        api_simulation_time: 3000,
+        tasks: [
+            { id: 1, name: 'Watch Premium Ad', reward: 250, time: 15, icon: 'fa-play' },
+            { id: 2, name: 'Mega Offerwall', reward: 850, time: 30, icon: 'fa-bolt' },
+            { id: 3, name: 'Quick Reward', reward: 50, time: 5, icon: 'fa-bolt' },
+            { id: 4, name: 'Sponsor Video', reward: 120, time: 10, icon: 'fa-video' }
+        ],
+        store: [
+            { id: 's1', name: '100 Instagram Followers', cost: 4500, icon: 'fa-brands fa-instagram', color: '#E1306C' },
+            { id: 's2', name: '500 TikTok Likes', cost: 8000, icon: 'fa-brands fa-tiktok', color: '#fff' },
+            { id: 's3', name: '100 FreeFire Diamonds', cost: 12000, icon: 'fa-solid fa-gem', color: '#3bccff' },
+            { id: 's4', name: 'Netflix Premium (1M)', cost: 45000, icon: 'fa-solid fa-tv', color: '#E50914' }
+        ]
+    },
+
+    // 3. CORE LOGIC
+    init: function() {
+        this.UI.renderTasks();
+        this.UI.renderStore();
+        this.UI.startTicker();
+        this.UI.sync();
+        this.Logger.add('System Ready. User: ' + this.db.user.id);
+    },
+
+    Logic: {
+        processTask: function(taskId) {
+            const task = Engine.config.tasks.find(t => t.id === taskId);
+            const modal = document.getElementById('task-modal');
+            const timerText = document.getElementById('modal-timer');
+            const titleText = document.getElementById('modal-title');
+
+            modal.style.display = 'flex';
+            titleText.innerText = task.name;
+            
+            let remaining = task.time;
+            timerText.innerText = remaining;
+
+            const countdown = setInterval(() => {
+                remaining--;
+                timerText.innerText = remaining;
+
+                if(remaining <= 0) {
+                    clearInterval(countdown);
+                    Engine.db.user.balance += task.reward;
+                    Engine.db.admin.revenue += (task.reward * 0.0001); // Simulated owner profit
+                    Engine.UI.sync();
+                    Engine.UI.showToast(`Success! +${task.reward} coins`);
+                    modal.style.display = 'none';
+                    Engine.Logger.add(`Task Completed: ${task.name}`);
+                }
+            }, 1000);
+        },
+
+        processOrder: function(itemId) {
+            const item = Engine.config.store.find(i => i.id === itemId);
+            if(Engine.db.user.balance < item.cost) {
+                alert('Insufficient Balance! Keep earning.');
+                return;
+            }
+
+            const target = prompt(`Enter your account link/ID for ${item.name}:`);
+            if(!target) return;
+
+            const modal = document.getElementById('task-modal');
+            const timerText = document.getElementById('modal-timer');
+            modal.style.display = 'flex';
+            timerText.innerText = 'API';
+            
+            setTimeout(() => {
+                Engine.db.user.balance -= item.cost;
+                Engine.db.admin.orders++;
+                Engine.UI.sync();
+                modal.style.display = 'none';
+                alert('Order Placed! Automation is processing your request.');
+                Engine.Logger.add(`Order Placed: ${item.name} for ${target}`);
+            }, Engine.config.api_simulation_time);
+        }
+    },
+
+    // 4. UI ENGINE
+    UI: {
+        sync: function() {
+            const d = Engine.db;
+            document.getElementById('top-balance').innerText = d.user.balance.toLocaleString();
+            document.getElementById('main-balance').innerText = d.user.balance.toLocaleString();
+            
+            const perc = Math.min((d.user.balance / Engine.config.goal) * 100, 100);
+            document.getElementById('goal-bar').style.width = perc + '%';
+            document.getElementById('goal-percent').innerText = Math.floor(perc) + '%';
+
+            // Admin Sync
+            document.getElementById('adm-profit').innerText = '$' + d.admin.revenue.toFixed(2);
+            document.getElementById('adm-orders').innerText = d.admin.orders;
+
+            // Persistence
+            localStorage.setItem('_ge_bal', d.user.balance);
+            localStorage.setItem('_ge_rev', d.admin.revenue);
+            localStorage.setItem('_ge_ord', d.admin.orders);
+            localStorage.setItem('_ge_logs', JSON.stringify(d.logs));
+        },
+
+        renderTasks: function() {
+            const container = document.getElementById('tasks-list');
+            Engine.config.tasks.forEach(task => {
+                container.innerHTML += `
+                    <div class="task-box animate__animated animate__fadeIn">
+                        <div class="task-icon"><i class="fa-solid ${task.icon}"></i></div>
+                        <div class="task-content">
+                            <h4>${task.name}</h4>
+                            <p>+${task.reward} Coins</p>
+                        </div>
+                        <button class="task-btn" onclick="Engine.Logic.processTask(${task.id})">START</button>
+                    </div>
+                `;
+            });
+        },
+
+        renderStore: function() {
+            const container = document.getElementById('store-items');
+            Engine.config.store.forEach(item => {
+                container.innerHTML += `
+                    <div class="item-card animate__animated animate__zoomIn">
+                        <i class="${item.icon}" style="color:${item.color}"></i>
+                        <b>${item.name}</b>
+                        <div class="item-price">${item.cost.toLocaleString()} Coins</div>
+                        <button onclick="Engine.Logic.processOrder('${item.id}')" style="margin-top:10px; border:none; background:none; color:var(--p-blue); font-weight:900; cursor:pointer; font-size:12px;">ORDER NOW</button>
+                    </div>
+                `;
+            });
+        },
+
+        switchPage: function(pageId, el) {
+            document.querySelectorAll('.page-node').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById('page-' + pageId).classList.add('active');
+            el.classList.add('active');
+        },
+
+        showToast: function(msg) {
+            const t = document.getElementById('toast-notify');
+            t.innerText = msg;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 3000);
+        },
+
+        startTicker: function() {
+            const ticker = document.getElementById('live-ticker');
+            const data = [
+                '• Ahmed withdrew $50 via PayPal',
+                '• New order for 1k TikTok Likes',
+                '• Server Status: Healthy (0.02ms)',
+                '• User GE-9921 earned 5,000 pts'
+            ];
+            data.forEach(d => {
+                ticker.innerHTML += `<span>${d}</span>`;
+            });
+        }
+    },
+
+    // 5. ADMIN SYSTEM
+    Admin: {
+        requestAccess: function() {
+            const key = prompt('Enter Admin Access Key:');
+            if(key === Engine.db.admin.key) {
+                Engine.UI.switchPage('admin', document.querySelectorAll('.nav-item')[2]);
+                Engine.Logger.add('Admin access granted.');
+            } else {
+                alert('Access Denied!');
+            }
+        }
+    },
+
+    // 6. LOGGER
+    Logger: {
+        add: function(msg) {
+            const logBox = document.getElementById('sys-logs');
+            const time = new Date().toLocaleTimeString();
+            const logMsg = `> [${time}] ${msg}`;
+            Engine.db.logs.unshift(logMsg);
+            if(Engine.db.logs.length > 20) Engine.db.logs.pop();
+            
+            logBox.innerHTML = Engine.db.logs.join('<br>');
+        }
+    }
+};
+
+// Start the Engine on Load
+window.onload = () => Engine.init();
+
+</script>
+</body>
+</html>
